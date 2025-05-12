@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Controle Financeiro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark {
+      background-color: #1c1c1c;
+      color: #f9f9f9;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 1em;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      width: calc(100% - 22px);
+      font-size: 16px;
+    }
+
+    .saldo {
+      font-size: 20px;
+      margin: 20px 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 4px;
+      background-color: #e0ffe0;
+    }
+
+    .despesa {
+      background-color: #ffe0e0;
+    }
+
+    .theme-toggle {
+      background-color: #333;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Controle Financeiro Pessoal</h1>
+  </header>
+  <main>
+    <input type="text" id="descricao" placeholder="Descrição">
+    <input type="number" id="valor" placeholder="Valor (use negativo para despesas)">
+    <button id="adicionar">Adicionar Transação</button>
+    <div class="saldo" id="saldo">Saldo Total: R$ 0.00</div>
+    <ul id="transacoes"></ul>
+    <button class="theme-toggle" id="tema">Alternar Tema</button>
+  </main>
+
+  <script>
+    const transacoes = [];
+    const lista = document.getElementById('transacoes');
+    const saldo = document.getElementById('saldo');
+
+    document.getElementById('adicionar').addEventListener('click', () => {
+      const descricao = document.querySelector('#descricao').value.trim();
+      const valor = parseFloat(document.querySelector('#valor').value);
+
+      if (!descricao || isNaN(valor)) {
+        alert('Preencha os campos corretamente!');
+        return;
+      }
+
+      transacoes.push({ descricao, valor });
+      atualizarLista();
+    });
+
+    function atualizarLista() {
+      lista.innerHTML = '';
+      let total = 0;
+
+      transacoes.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.descricao}: R$ ${item.valor.toFixed(2)}`;
+        li.className = item.valor < 0 ? 'despesa' : '';
+        lista.appendChild(li);
+        total += item.valor;
+      });
+
+      saldo.textContent = `Saldo Total: R$ ${total.toFixed(2)}`;
+    }
+
+    document.getElementById('tema').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+  </script>
+</body>
+</html>

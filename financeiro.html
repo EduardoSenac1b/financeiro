@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal de Investimentos</title>
+  <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0; 
+      }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      transition: background 0.3s, color 0.3s;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .dark {
+      background-color: #121212;
+      color: #f4f4f4;
+    }
+
+    nav {
+      width: 200px;
+      background-color: #333;
+      color: white;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    nav h2 {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    nav ul {
+      list-style: none;
+    }
+
+    nav ul li {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #444;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    nav ul li:hover {
+      background-color: #555;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 20px;
+    }
+
+    #dolar {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: 2px solid #ccc;
+      margin-top: 20px;
+    }
+
+    .theme-toggle {
+      background-color: #555;
+      color: white;
+      border: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>💼 Menu</h2>
+    <ul>
+      <li onclick="mostrarDolar()">💵 Dólar do Dia</li>
+      <li onclick="mostrarFinanceiro()">📊 Controle Financeiro</li>
+    </ul>
+    <button class="theme-toggle" onclick="trocarTema()">🌗 Alternar Tema</button>
+  </nav>
+
+  <main>
+    <h1>Portal de Investimentos</h1>
+    <div id="dolar">Clique no menu para ver o valor do dólar.</div>
+    <div id="financeiro" style="display: none;">
+      <h2>Controle Financeiro Pessoal</h2>
+      <iframe srcdoc="
+        <!DOCTYPE html>
+        <html lang='pt-BR'>
+        <head>
+          <meta charset='UTF-8'>
+          <style>
+            body { font-family: Arial; background: #f4f4f4; padding: 10px; }
+            input, button { margin: 5px; padding: 5px; width: 90%; }
+            ul { padding: 0; list-style: none; }
+            li { margin: 5px 0; background: #e0ffe0; padding: 5px; }
+            .despesa { background: #ffe0e0; }
+          </style>
+        </head>
+        <body>
+          <input type='text' id='desc' placeholder='Descrição'>
+          <input type='number' id='val' placeholder='Valor (negativo = despesa)'>
+          <button onclick='add()'>Adicionar</button>
+          <div id='saldo'>Saldo: R$ 0.00</div>
+          <ul id='lista'></ul>
+          <script>
+            const trans = [];
+            function add() {
+              const d = document.getElementById('desc').value.trim();
+              const v = parseFloat(document.getElementById('val').value);
+              if (!d || isNaN(v)) return alert('Preencha tudo!');
+              trans.push({d, v});
+              render();
+            }
+            function render() {
+              let total = 0;
+              const ul = document.getElementById('lista');
+              ul.innerHTML = '';
+              trans.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t.d + ': R$ ' + t.v.toFixed(2);
+                if (t.v < 0) li.classList.add('despesa');
+                ul.appendChild(li);
+                total += t.v;
+              });
+              document.getElementById('saldo').textContent = 'Saldo: R$ ' + total.toFixed(2);
+            }
+          </script>
+        </body>
+        </html>
+      "></iframe>
+    </div>
+  </main>
+
+  <script>
+    function mostrarDolar() {
+      const valor = (4.8 + Math.random()).toFixed(2);
+      document.getElementById('dolar').textContent = `💵 Valor do dólar hoje: R$ ${valor}`;
+      document.getElementById('financeiro').style.display = 'none';
+    }
+
+    function mostrarFinanceiro() {
+      document.getElementById('dolar').textContent = '';
+      document.getElementById('financeiro').style.display = 'block';
+    }
+
+    function trocarTema() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</body>
+</html>
